@@ -1,6 +1,4 @@
-================================================================================
-                                security.py
-================================================================================
+"""Secure system to encrypt, decrypt, import a .py file into global namespace
 
 OVERVIEW
 --------
@@ -42,8 +40,8 @@ DESCRIPTION:
 REQUIREMENTS:
 -------------
 
-    None. Imports os and urllib2 but code can be revised to drop urllib2 if
-    you always use a local private key file. Code is pure python.
+    None. Pure Python. Module imports os and urllib2 but code can be revised
+    to drop urllib2 if you always use a local private key file.
 
 
 HOW TO INSTALL/USE:
@@ -73,3 +71,57 @@ HOW TO INSTALL/USE:
     During development, the above variables are encrypted and saved in a file.
     In production, the above variables are decrypted/imported into namespace.
     The above variables never hit the production harddrive or go over the wire.
+
+"""
+__module__    = 'security.py'
+__author__    = "Kenneth A Younge"
+__copyright__ = "Copyright (c) 2014, Kenneth A Younge"
+__license__   = "GNU General Public License"
+__email__     = "kenyounge@gmail.com"
+
+import os
+import urllib2
+
+DEV_MACHINES  =  ['Kens-MacBook-Pro-3.local', ]  # authorized development machines
+CONFIG_FILE   =  '_settings.py' # raw file; prefix with _ and add _* to .gitignore
+KEY_FILE      =  'patrf.rc4'  # filename of a private key stored in root ( / )
+KEY_URL       =  'http://metadata.google.internal/computeMetadata/v1/project/attributes/rc4'
+
+try:     KEY  =  urllib2.urlopen(urllib2.Request( KEY_URL,
+                    headers={ 'Metadata-Flavor' : 'Google' })).read()
+except:  KEY  =  open('/' + KEY_FILE, 'r').read()
+
+def crypt(data, key):
+    x = 0
+    box = range(256)
+    for i in range(256):
+        x = (x + box[i] + ord(key[i % len(key)])) % 256
+        box[i], box[x] = box[x], box[i]
+    x = 0
+    y = 0
+    out = []
+    for char in data:
+        x = (x + 1) % 256
+        y = (y + box[x]) % 256
+        box[x], box[y] = box[y], box[x]
+        out.append(chr(ord(char) ^ box[(box[x] + box[y]) % 256]))
+    return ''.join(out)
+
+# Encrypt variables and values
+try:
+    if os.uname()[1] in DEV_MACHINES:
+        with open(CONFIG_FILE, 'r') as f: txt = f.read()
+        txt = crypt(str(txt).strip(), KEY).encode('hex')
+        with open(CONFIG_FILE[1:], 'w') as f: f.write(txt)
+except Exception as e:
+    print 'Unable to encrypt ' + CONFIG_FILE + ': ' + str(e)
+
+# Decrypt and import variables and values
+try:
+    with open(CONFIG_FILE[1:], 'r') as f:
+        txt = crypt(str(f.read()).strip().decode('hex'), KEY)
+    for line in txt.splitlines():
+        line = str(line).strip()
+        if line: exec line in globals()
+except Exception as e:
+    print 'Unable to import ' + CONFIG_FILE + ': ' + str(e)
