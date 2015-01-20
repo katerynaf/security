@@ -1,4 +1,4 @@
-## Overview
+## Introduction
 
 This application encrypts, decrypts, and imports Python variables (often passwords) into the global namespace. It gives you a simple (but secure) way to store private information alongside your Python code, and then use that information within a production environment. The code is pure Python, has no third-party dependencies, and requires almost no recoding of your program. Unencrypted secrets never go over the wire or touch a production hard drive.
 
@@ -22,55 +22,56 @@ For exqample, if you define python variable constants in _passwords.py, then tho
   
 See hello_world.py for a working example.
   
-## Step-by-Step Instructions
+## Installation
 
-    1. Make a private key, such as:  
+#### (Step-by-step instructions to get started)
+
+    1. Make a text-based private key. For example:  
     
             kksdhfs984y5hbswfd8WEZJD8asdhasi!JHADHjasbd78asjdai  
           
-       Save your key into a file in the root directory, such as:  
+       Save key into the root dir of your development and production machines. For example:  
           
             /key.rc4  
           
-       Save your private sequence of characters into the Google metadata server (optional):  
+       And/or save your key into the Google metadata server (optional - if you use GCE):  
        
             http://metadata.google.internal/computeMetadata/v1/project/attributes/rc4  
     
-    2. Copy this file (security.py) from GitHub into your project.  
+    2. Copy security.py from GitHub into your project.  
 
-    3. Add the following line of code to your program:  
+    3. Add the following line of code to your main program:  
 
           from security import *   
 
-    4. Trick developer programs (such as PyCharm) to provide code completion, by adding   
-       the following lines of code to your main program. This does not effect production
-       execution, as the _passwords.py file should not exist in production:  
+    4. Trick dev UI (at least PyCharm) to provide code completion during development. 
+       This does not affect production, as _passwords.py should not exist in production.
 
             try: from _passwords import *  
             except: pass  
 
-    5. Store your passwords and private information as regular python variable statements  
-       in a raw python .py file, such as _passwords.py. For example:  
+    5. Store private information (such as passwords) as regular python variable assignments  
+       in a raw .py file. The default setup assumes you use the file _passwords.py:  
 
             MYSQL_PASSWORD = MyExample!password4   
             SENDGRID_PWD = THisIS_my44sendgridpwd   
             LOGGLY_URL = 'http://logs-01.loggly.com/inputs/00-00-00-00-00/'   
         
-    6. Excute your code at least once in your development environment. The line of code
-    from step #3 ( from security import * ) will automatically encrypt your secret info.  
+    6. Execute your regular program on your dev machine to encrypt your secret info. The
+       import statement (step # 3 above) will auto run security.py and encrypt your info.
+       This converts the raw info in _passwords.py into encrypted info in passwords.py
           
-    7. Use git 'push-to-deploy' into your production environments, excluding secret files.
+    7. Use git to 'push-to-deploy' to production machines. Do NOT include your private
+       key in your repo (i.e., exclude the file security.rc4), and do not include your
+       raw (unsecure) files in your repo (i.e., exclude the file _passwords.py). 
+       
+       The files security.rc4 and _passwords.py are included here only as example files.
     
-    You're done!  Provide feedback or contribute to the project at GitHub.com  
+    You are done!    
   
   
 ## Technical notes 
  
-#### Important!
-  
-    A private key file (security.rc4) and raw password file (_passwords.py) are included in this
-    repository for demonstration purposes only. Do NOT include those files in your own repo. 
-  
 #### Encryption
   
 Encryption is implemented with the standard RC4 algorithm. Generate a long, random sequence of ASCII characters and save it into a local file (as defined by the constant KEY_FILE; see the file security.rc4 as an example). You may want to store this file in the root directory, as doing so requires root access; but you may store it in any location you set within KEY_FILE. 
@@ -83,3 +84,8 @@ This application was initially developed for Google Compute Engine. Store your p
 
 I use this code myself for a project on Google Compute Engine. I'm releasing the code as a 'pay-it-forward' for the many sections of code I have borrowed from others. This is NOT a formal application - there is no support - there are no guarantees - use it at your own risk. Feel free to fork the repo, improve the code, and submit it back.
  
+#### Version History
+
+Version 1.0 - January 20, 2015
+
+    * Initial release.
