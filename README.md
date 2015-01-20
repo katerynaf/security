@@ -81,5 +81,5 @@ This application was initially developed for Google Compute Engine. Store your p
   
 #### Disclaimer
 
-I use this code myself for a Google COmpute project. I've released it as a 'pay-it-forward' for the many sections of code I borrow from others. It is NOT a formal application - there is no support - there are no guarantees - use it at your own risk. Feel free to fork the repo, improve the code, and submit it back.
+I use this code myself for a project on Google Compute Engine. I'm releasing the code as a 'pay-it-forward' for the many sections of code I have borrowed from others. This is NOT a formal application - there is no support - there are no guarantees - use it at your own risk. Feel free to fork the repo, improve the code, and submit it back.
  
