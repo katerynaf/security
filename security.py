@@ -68,7 +68,7 @@ import os
 import urllib2
 
 DEV_MACHINES  =  ['Kens-MacBook-Pro-3.local', ]  # authorized development machines
-RAW_FILES     =  ['_settings.py', ] # list of unencrypted files needing encryption
+RAW_FILES     =  ['_passwords.py', ] # list of unencrypted files needing encryption
 KEY_FILE      =  'patrf.rc4'  # filename of a private key stored in root ( / )
 KEY_URL       =  'http://metadata.google.internal/computeMetadata/v1/project/attributes/rc4'
 
@@ -111,6 +111,8 @@ for rawname in RAW_FILES:
             txt = crypt(str(f.read()).strip().decode('hex'), KEY)
         for line in txt.splitlines():
             line = str(line).strip()
-            if line: exec line in globals()
+            if line:
+                try: exec line in globals()
+                except: 'Warning - you may have a coding error in ' + rawname + '  Code can NOT span lines.'
     except Exception as e:
         print 'Unable to import ' + rawname + ': ' + str(e)
