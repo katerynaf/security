@@ -1,51 +1,36 @@
-"""Secure system to encrypt, decrypt, import a .py file into global namespace
+"""Module encrypts, decrypts, and imports python variables into the global namespace.
 
-OVERVIEW
---------
+## Overview
 
-    Module encrypts, decrypts, and imports variables into the global namespace.
-    This provides a simple, but secure, way to store passwords in Python.
+This "security" application encrypts, decrypts, and imports Python variables into the global namespace. It gives you a
+simple (but secure) way to store passwords and other private information that your Python code needs to use in a
+production environment. It works through a simple import call. The code is pure Python with no third-party dependencies.
 
+## Description:
 
-DESCRIPTION:
-------------
+Importing this module in a development environment will automatically encrypt raw files (as listed in RAW_FILES) and
+save an encrypted version of each file to disk. Prefix the name of each raw (unencrypted) file with "_"
+(e.g.: "_settings.py"). If you add "_*" to your .gitignore file, then unencrypted files starting with "_" will be
+excluded from your GIT repository.
 
-    This module automatically encrypts some file (hardcoded as CONFIG_FILE)
-    during development, and decrypts/imports it (i.e., executes it) during
-    production. Module assumes that it is in production, unless it is running
-    on one of the DEV_MACHINES. Importing module on one of the DEV_MACHINES
-    will auto-encrypt the file defined in CONFIG_FILE into a shadow copy
-    of that file in the current directory of your development machine. Prefix
-    filename defined in CONFIG_FILE file with a "_" (e.g.: "_settings.py")
-    and add "_*" to your .gitignore file; doing so causes all files starting
-    with "_" to be excluded from your GIT repo. The original (unencrypted)
-    file will NOT appear in your GIT repo (where you do not want it!).
-    All code within your CONFIG_FILE must be executable line-by-line python;
-    do not use statements, expressions, etc. that span multiple lines.
+Importing this module in a production environment will automatically decrypt and then import all code & variables from
+the original raw file. It will import all references into the global namespace so you may then reference those variables
+as you normally would in Python. The module assumes that it is in a production environment unless it is running on a
+machine listed in the DEV_MACHINES.
 
-    Encryption is implemented with the standard RC4 algorithm. You need to
-    make your own, private encryption key as a long sequence of ASCII chars.
-    Store your private key in a file (KEY_FILENAME) or a server (KEY_URL).
-    Save a copy of your private key in the root directory (demonstrating root
-    access). If you provide access to your private key by URL, then you should
-    (pretty obviously) authenticate and restrict access to the URL in some way.
+Encryption is implemented with the standard RC4 algorithm. You need to provide a file with a long sequence of ASCII
+chars in it to serve as your private encryption key. You should store your private key file (as defined in KEY_FILE)
+in the root directory (demonstrating root access), or you should provide access to the key from a restricted server
+(as defined in KEY_URL). If you provide access to your key by URL, you should (obviously) authenticate and restrict
+access.
 
-    This code was developed with Google Compute Engine in mind. You can store
-    your private key in the Google metadata server and define the URL to it
-    in METADATA_KEY. Your entire project then has access to the private key
-    and you can revoke or change it centrally with minimal downtime. Google
-    automatically enforces access and priviledges to the metadata server.
+This code was developed with Google Compute Engine in mind. You can store your private key in the Google metadata server
+and define the URL to it in METADATA_KEY. Your entire project will then have access to your private key and you can
+revoke or change the key centrally, with minimal downtime. Google automatically enforces access rights to the metadata
+server.
 
 
-REQUIREMENTS:
--------------
-
-    None. Pure Python. Module imports os and urllib2 but code can be revised
-    to drop urllib2 if you always use a local private key file.
-
-
-HOW TO INSTALL/USE:
--------------------
+## Installation & use:
 
     1. Copy this file (security.py) from GitHub into your project directory.
 
@@ -68,9 +53,9 @@ HOW TO INSTALL/USE:
         LOGGLY_URL = 'http://logs-01.loggly.com/inputs/00-00-00-00-00/'
         etc...
 
-    During development, the above variables are encrypted and saved in a file.
-    In production, the above variables are decrypted/imported into namespace.
-    The above variables never hit the production harddrive or go over the wire.
+        During development, the above variables are encrypted and saved in a file.
+        In production, the above variables are decrypted/imported into namespace.
+        Decrypted variables never go over the wire or hit the production harddrive.
 
 """
 __module__    = 'security.py'
@@ -83,7 +68,7 @@ import os
 import urllib2
 
 DEV_MACHINES  =  ['Kens-MacBook-Pro-3.local', ]  # authorized development machines
-CONFIG_FILE   =  '_settings.py' # raw file; prefix with _ and add _* to .gitignore
+RAW_FILES     =  ['_settings.py', ] # list of unencrypted files needing encryption
 KEY_FILE      =  'patrf.rc4'  # filename of a private key stored in root ( / )
 KEY_URL       =  'http://metadata.google.internal/computeMetadata/v1/project/attributes/rc4'
 
@@ -107,21 +92,25 @@ def crypt(data, key):
         out.append(chr(ord(char) ^ box[(box[x] + box[y]) % 256]))
     return ''.join(out)
 
-# Encrypt variables and values
-try:
-    if os.uname()[1] in DEV_MACHINES:
-        with open(CONFIG_FILE, 'r') as f: txt = f.read()
-        txt = crypt(str(txt).strip(), KEY).encode('hex')
-        with open(CONFIG_FILE[1:], 'w') as f: f.write(txt)
-except Exception as e:
-    print 'Unable to encrypt ' + CONFIG_FILE + ': ' + str(e)
+for rawname in RAW_FILES:
 
-# Decrypt and import variables and values
-try:
-    with open(CONFIG_FILE[1:], 'r') as f:
-        txt = crypt(str(f.read()).strip().decode('hex'), KEY)
-    for line in txt.splitlines():
-        line = str(line).strip()
-        if line: exec line in globals()
-except Exception as e:
-    print 'Unable to import ' + CONFIG_FILE + ': ' + str(e)
+    securename = rawname[1:]  # change if you use a different naming convention
+
+    # Encrypt variables and values
+    try:
+        if os.uname()[1] in DEV_MACHINES:
+            with open(rawname, 'r') as f: txt = f.read()
+            txt = crypt(str(txt).strip(), KEY).encode('hex')
+            with open(securename, 'w') as f: f.write(txt)
+    except Exception as e:
+        print 'Unable to encrypt ' + rawname + ': ' + str(e)
+
+    # Decrypt and import variables and values
+    try:
+        with open(securename, 'r') as f:
+            txt = crypt(str(f.read()).strip().decode('hex'), KEY)
+        for line in txt.splitlines():
+            line = str(line).strip()
+            if line: exec line in globals()
+    except Exception as e:
+        print 'Unable to import ' + rawname + ': ' + str(e)
