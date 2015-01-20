@@ -6,6 +6,8 @@ Implementation is as simple as:
 
     from security import *
 
+I have released this mini-app as a fun side-project - vote it up on GitHub, StackOverflow, etc!
+
 ## Description
 
 #### Development  
