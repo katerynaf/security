@@ -10,13 +10,15 @@ Implementation is as simple as:
 
 #### Development  
 
-In a development environment, importing this module will automatically encrypt all of the raw files listed in RAW_FILES, and save an encrypted version of each to disk. I suggest you add _ before each raw file name to indicate insecure information; then add _* to your .gitignore file to automatically exclude those files from your repository.  
+In a development environment, importing security.py will automatically encrypt all of the raw files listed in RAW_FILES, and save an encrypted version of each to disk. I suggest you add _ before each raw file name to indicate insecure information; then add _* to your .gitignore file to automatically exclude those files from your repository.  
   
-For example, the application is pre-configured to encrypt the raw file _passwords.py (this file is included in this public repo for demonstration purposes, but it should not be included in your own repo).
+For example, the application is pre-configured to encrypt _passwords.py (included in this repo for demonstration purposes - do not include the raw password file in your own repo). The file _passwords.py will be encrypted into passwords.py every time you execute your program in your production environment (as defined in DEV_MACHINES).
   
 #### Production  
   
-In a production environment, importing this module will automatically decrypt and import the original python code into the global namespace. For exqample, if you define python variable constants in _passwords.py, then those variables may then be directly referenced within your code. The module assumes that it is in a production environment unless it is running on a machine listed in DEV_MACHINES. 
+In a production environment, importing security.py will automatically decrypt and execute the origianl python file, effectively putting all objects and constants into the global namespace.  
+
+For exqample, if you define python variable constants in _passwords.py, then those variables may then be directly referenced within your code. The module assumes that it is in a production environment unless it is running on a machine listed in DEV_MACHINES. 
   
 See hello_world.py for a working example.
   
