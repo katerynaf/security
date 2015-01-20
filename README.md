@@ -4,7 +4,7 @@ This "security" application encrypts, decrypts, and imports Python variables int
 
 ## Description:
 
-Importing this module in a development environment will automatically encrypt raw files (as listed in RAW_FILES) and save an encrypted version of each file to disk. Prefix the name of each raw (unencrypted) file with "_" (e.g.: "_settings.py"). If you add "_*" to your .gitignore file, then unencrypted files starting with "_" will be excluded from your GIT repository. 
+Importing this module in a development environment will automatically encrypt all fo the raw files listed in RAW_FILES, and save an encrypted version of each file to disk. I suggest adding the prefix of "_" to each raw (unencrypted) file (for example: "_settings.py"). If you then add "_*" to your .gitignore file, git will leave the unencrypted version of the raw out of your GIT repository. 
 
 Importing this module in a production environment will automatically decrypt and then import all code & variables from the original raw file. It will import all references into the global namespace so you may then reference those variables as you normally would in Python. The module assumes that it is in a production environment unless it is running on a machine listed in the DEV_MACHINES. 
 
