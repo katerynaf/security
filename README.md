@@ -1,6 +1,6 @@
 ## Overview
 
-This application encrypts, decrypts, and imports Python variables (often passwords) into the global namespace. It gives you a simple (but secure) way to store private information (such as passwords) along with your Python code, and then use that information within a production environment. The code is pure Python and has no third-party dependencies.
+This application encrypts, decrypts, and imports Python variables (often passwords) into the global namespace. It gives you a simple (but secure) way to store private information (such as passwords) along with your Python code, and then use that information within a production environment. The code is pure Python and has no third-party dependencies. Your unencrypted secrets never go over the wire or touch the production hard drive.
 
     Implementation is as simple as:       from security import *
 
@@ -16,27 +16,45 @@ This application works with Google Compute Engine. Store your private key in the
   
 ## Installation & use
 
-    1. Copy this file (security.py) from GitHub into your project directory.  
+    1. Make a private key, such as:  
+    
+          kksdhfs984y5hbswfd8WEZJD8asdhasi!JHADHjasbd78asjdai  
+          
+       Save your private sequence of characters into a file in the root directory:  
+          
+          /key.rc4  
+          
+       Save your private sequence of characters into the Google metadata server (optional):  
+       
+          http://metadata.google.internal/computeMetadata/v1/project/attributes/rc4  
+    
+    2. Copy this file (security.py) from GitHub into your project directory.  
 
-    2. Add the following line of code to your program (will auto-run module):  
+    3. Add the following line of code to your program (it will auto-run the module):  
 
-        from security import *  
+          from security import *   
 
-    3. To trick dev UI programs such as PyCharm into interpreting your raw
-       file and providing code completion during development, add these
-       lines of code to your main program (change "_settings" to reflect
-       the actual module filename you define in CONFIG_FILE):
+    4. Trick developer GUI programs (such as PyCharm) into interpreting your raw  
+       file on development machines, and thus provide code completion, by adding the  
+       following lines of code to your main program. This code will have no effect  
+       in production environments as the _passwords.py file will not exist in   
+       production environments (you should change _passwords below to reflect  
+       the actual modules you are encrypting and have listed in RAW_FILES):  
 
-        try: from _settings import *  
-        except: pass  
+          try: from _passwords import *  
+          except: pass  
 
-    4. Store passwords as python variable statements in _settings.py file:
+    5. Store your passwords or other private info as regular python variable statements  
+       in your _passwords.py file (and/or other files listed in RAW_FILES). For example:  
 
-        MYSQL_PASSWORD = MyExample!password4  
-        SENDGRID_PWD = THisIS_my44sendgridpwd  
-        LOGGLY_URL = 'http://logs-01.loggly.com/inputs/00-00-00-00-00/'  
-        etc...
+          MYSQL_PASSWORD = MyExample!password4   
+          SENDGRID_PWD = THisIS_my44sendgridpwd   
+          LOGGLY_URL = 'http://logs-01.loggly.com/inputs/00-00-00-00-00/'   
         
-        During development, the above variables are encrypted and saved in a file.
-        In production, the above variables are decrypted/imported into namespace.
-        Decrypted variables never go over the wire or hit the production harddrive.
+    6. Everything will update each time you execute:   from security import *  
+       That happens automatically when you run your program, so be sure to run your  
+        program at least one time on your development machine.  
+          
+    7. Use GIT to 'push-to-deploy' to your production environments. You're done!  
+       
+    
