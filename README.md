@@ -10,7 +10,7 @@ Implementation is as simple as:
 
 #### Development  
 
-In a development environment, importing this module will automatically encrypt all of the raw files listed in RAW_FILES, and save an encrypted version of each file to disk. I suggest you add _ as a prefix before each raw file name (for unencrypted and thus insecure information). Then add _* to your .gitignore file, and git will automatically exclude files starting with _ from your repository. The default configurations refers to the file: _passwords.py
+In a development environment, importing this module will automatically encrypt all of the raw files listed in RAW_FILES, and save an encrypted version of each file to disk. I suggest you add _ before each raw file name (indicating insecure information), and then add _* to your .gitignore file. Doing so will make GIT automatically exclude those secret files (files starting with _) from your repository. For example, security.py is configured by default to process the raw file _passwords.py (this file IS included in this repo for demonstration purposes, but should otherwise be excluded from your own repo).
   
 #### Production  
   
