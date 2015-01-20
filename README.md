@@ -2,7 +2,7 @@
 
 This application encrypts, decrypts, and imports Python variables (often passwords) into the global namespace. It gives you a simple (but secure) way to store private information (such as passwords) along with your Python code, and then use that information within a production environment. The code is pure Python and has no third-party dependencies.
 
-    Implementation is as simple as:       from security import *
+    **Implementation is as simple as:**       from security import *
 
 ## Description
 
