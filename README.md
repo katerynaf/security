@@ -1,22 +1,19 @@
-## OVERVIEW
+## Overview
 
-> Module encrypts, decrypts, and imports variables into the global namespace. This provides a simple, but secure, way to store passwords in Python.
+This "security" application encrypts, decrypts, and imports Python variables into the global namespace. It gives you a simple (but secure) way to store passwords and other private information that your Python code needs to use in a production environment. It works through a simple import call. The code is pure Python with no third-party dependencies.
 
+## Description:
 
-## DESCRIPTION:
+Importing this module in a development environment will automatically encrypt raw files (as listed in RAW_FILES) and save an encrypted version of each file to disk. Prefix the name of each raw (unencrypted) file with "_" (e.g.: "_settings.py"). If you add "_*" to your .gitignore file, then unencrypted files starting with "_" will be excluded from your GIT repository. 
 
-This module automatically encrypts a file (named in CONFIG_FILE) during development, and decrypts/imports it (i.e., executes it) during production. Module assumes that it is in production, unless it is running on one of the DEV_MACHINES. Importing module on one of the DEV_MACHINES will auto-encrypt the file defined in the CONFIG_FILE into a shadow copy of that file in the current directory of your development machine. Prefix the filename defined in CONFIG_FILE file with a "_" (e.g.: "_settings.py") and add "_*" to your .gitignore file; doing so causes all files starting with "_" to be excluded from your GIT repo. The original (unencrypted) file will NOT appear in your GIT repo (where you do not want it!). All code within your CONFIG_FILE must be executable line-by-line python; do not use statements, expressions, etc. that span multiple lines.  
+Importing this module in a production environment will automatically decrypt and then import all code & variables from the original raw file. It will import all references into the global namespace so you may then reference those variables as you normally would in Python. The module assumes that it is in a production environment unless it is running on a machine listed in the DEV_MACHINES. 
 
-> Encryption is implemented with the standard RC4 algorithm. You need to make your own, private encryption key as a long sequence of ASCII chars. Store your private key in a file (KEY_FILENAME) or a server (KEY_URL). Save a copy of your private key in the root directory (demonstrating root access). If you provide access to your private key by URL, then you should (obviously) authenticate and restrict access to the URL.  
+Encryption is implemented with the standard RC4 algorithm. You need to provide a file with a long sequence of ASCII chars in it to serve as your private encryption key. You should store your private key file (as defined in KEY_FILE) in the root directory (demonstrating root access), or you should provide access to the key from a restricted server (as defined in KEY_URL). If you provide access to your key by URL, you should (obviously) authenticate and restrict access.  
 
-> This code was developed with Google Compute Engine in mind. You can store your private key in the Google metadata server and define the URL to it in METADATA_KEY. Your entire project then has access to the private key and you can revoke or change the key centrally with minimal downtime. Google automatically enforces access rights and priviledges to the metadata server.
+This code was developed with Google Compute Engine in mind. You can store your private key in the Google metadata server and define the URL to it in METADATA_KEY. Your entire project will then have access to your private key and you can revoke or change the key centrally, with minimal downtime. Google automatically enforces access rights to the metadata server.
   
   
-## REQUIREMENTS:
-
-> Pure Python. No dependencies. Imports os and urllib2, but you may drop urllib2 if you always use a private key file. 
-
-## HOW TO USE:
+## Installation & use:
 
     1. Copy this file (security.py) from GitHub into your project directory.  
 
