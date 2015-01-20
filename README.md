@@ -10,12 +10,16 @@ Implementation is as simple as:
 
 #### Development  
 
-In a development environment, importing this module will automatically encrypt all of the raw files listed in RAW_FILES, and save an encrypted version of each file to disk. I suggest you add _ before each raw file name (indicating insecure information), and then add _* to your .gitignore file. Doing so will make GIT automatically exclude those secret files (files starting with _) from your repository. For example, security.py is configured by default to process the raw file _passwords.py (this file IS included in this repo for demonstration purposes, but should otherwise be excluded from your own repo).
+In a development environment, importing this module will automatically encrypt all of the raw files listed in RAW_FILES, and save an encrypted version of each to disk. I suggest you add _ before each raw file name to indicate insecure information; then add _* to your .gitignore file to automatically exclude those files from your repository.  
+  
+For example, the application is pre-configured to encrypt the raw file _passwords.py (this file is included in this public repo for demonstration purposes, but it should not be included in your own repo).
   
 #### Production  
   
-In a production environment, importing this module will automatically decrypt and then import all python code (usually constants) from the original raw .py file (for example, from _passwords.py). The module will import all references into the global namespace, so you may then reference secured variables as you normally would in Python. The module assumes that it is in a production environment unless it is running on a machine listed in DEV_MACHINES. 
-
+In a production environment, importing this module will automatically decrypt and import the original python code into the global namespace. For exqample, if you define python variable constants in _passwords.py, then those variables may then be directly referenced within your code. The module assumes that it is in a production environment unless it is running on a machine listed in DEV_MACHINES. 
+  
+See hello_world.py for a working example.
+  
 ## Step-by-Step Instructions
 
     1. Make a private key, such as:  
