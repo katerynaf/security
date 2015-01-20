@@ -112,7 +112,9 @@ for rawname in RAW_FILES:
         for line in txt.splitlines():
             line = str(line).strip()
             if line:
-                try: exec line in globals()
-                except: 'Warning - you may have a coding error in ' + rawname + '  Code can NOT span lines.'
+                try:
+                    exec line in globals()
+                except:
+                    'Warning - you may have a coding error in ' + rawname + '  Code can NOT span lines.'
     except Exception as e:
         print 'Unable to import ' + rawname + ': ' + str(e)
