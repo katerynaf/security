@@ -8,8 +8,7 @@ OVERVIEW
 DESCRIPTION:
 ------------
 
-    This module automatically encrypts some file (hardcoded as CONFIG_FILE)
-    during development, and decrypts/imports it (i.e., executes it) during
+    This module automatically encrypts a file (named in CONFIG_FILE) during development, and decrypts/imports it (i.e., executes it) during
     production. Module assumes that it is in production, unless it is running
     on one of the DEV_MACHINES. Importing module on one of the DEV_MACHINES
     will auto-encrypt the file defined in CONFIG_FILE into a shadow copy
