@@ -6,8 +6,6 @@ Implementation is as simple as:
 
     from security import *
 
-I have released this mini-app as a fun side-project - vote it up on GitHub, StackOverflow, etc!
-
 ## Description
 
 #### Development  
@@ -81,4 +79,7 @@ Encryption is implemented with the standard RC4 algorithm. Generate a long, rand
   
 This application was initially developed for Google Compute Engine. Store your private key in the Google metadata server (with the private URL defined in METADATA_KEY). This application will automatically (and securely) request your private key from the metadata server. Google automatically enforces access rights and permissions for the metadata server. The advantage of this approach is that you can maintain your private key in just one location (to be used by many GCE instances), and then revoke or change the key with minimal disruption. 
   
+#### Disclaimer
+
+I use this code myself for a Google COmpute project. I've released it as a 'pay-it-forward' for the many sections of code I borrow from others. It is NOT a formal application - there is no support - there are no guarantees - use it at your own risk. Feel free to fork the repo, improve the code, and submit it back.
  
