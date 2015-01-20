@@ -24,7 +24,7 @@ See hello_world.py for a working example.
   
 ## Installation
 
-#### (Step-by-step instructions to get started)
+##### Step-by-step instructions to get started
 
     1. Make a text-based private key. For example:  
     
@@ -88,4 +88,4 @@ I use this code myself for a project on Google Compute Engine. I'm releasing the
 
 Version 1.0 - January 20, 2015
 
-    * Initial release.
+  * Initial release.
