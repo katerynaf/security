@@ -62,4 +62,4 @@ for rawname in RAW_FILES:
                 try: exec line in globals()
                 except: 'Warning - you may have a coding error in ' + rawname + '  Note that code can NOT span lines.'
     except Exception as e:
-        print 'Unable to import ' + rawname + ': ' + str(e)
+        print 'Unable to import: ' + str(e)
