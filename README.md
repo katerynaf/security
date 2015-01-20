@@ -1,6 +1,6 @@
 ## Introduction
 
-This application encrypts, decrypts, and imports Python variables (often passwords) into the global namespace. It gives you a simple (but secure) way to store private information alongside your Python code, and then use that information within a production environment. The code is pure Python, has no third-party dependencies, and requires almost no recoding of your program. Unencrypted secrets never go over the wire or touch a production hard drive.
+This application encrypts, decrypts, and imports Python variables (often passwords) into the global namespace. It gives you a simple (but secure) way to store private information alongside your regular Python code, and then use that information within a production environment. The code is pure Python, has no third-party dependencies, and (probably) requires no re-coding of your program. Unencrypted secrets never go over the wire, nor touch a production hard drive.
 
 Implementation is as simple as:
 
@@ -82,7 +82,7 @@ This application was initially developed for Google Compute Engine. Store your p
   
 #### Disclaimer
 
-I use this code myself for a project on Google Compute Engine. I'm releasing the code as a 'pay-it-forward' for the many sections of code I have borrowed from others. This is NOT a formal application - there is no support - there are no guarantees - use it at your own risk. Feel free to fork the repo, improve the code, and submit it back.
+I use this code myself on a project for Google Compute Engine and find it works well. I'm posting the code as *_pay-it-forward_* for the many sections of code I use from others. This is NOT a formal application - there is *no support* - there are no guarantees - use it at your own risk. Feel free to fork the repo, improve the code, and push it back.
  
 #### Version History
 
