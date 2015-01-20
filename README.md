@@ -55,8 +55,9 @@ In a production environment, importing this module will automatically decrypt an
           
     7. Use git 'push-to-deploy' into your production environments, excluding secret files.
     
-    You're done!  
-       
+    You're done!  Provide feedback or contribute to the project at GitHub.com  
+  
+  
 ## Technical notes 
  
 #### Important!
