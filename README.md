@@ -62,12 +62,9 @@ In a production environment, importing this module will automatically decrypt an
  
 #### Important!
   
-    A private key file (security.rc4) and raw password file (_passwords.py) are included 
-    in this repository for demonstration purposes only. Do NOT include those files in
-    your own repo. Install security.rc4 in your root directory and exclude _passwords.py
-    from the repo in your .gitignore file.  
+    A private key file (security.rc4) and raw password file (_passwords.py) are included in this
+    repository for demonstration purposes only. Do NOT include those files in your own repo. 
   
-
 #### Encryption
   
 Encryption is implemented with the standard RC4 algorithm. Generate a long, random sequence of ASCII characters and save it into a local file (as defined by the constant KEY_FILE; see the file security.rc4 as an example). You may want to store this file in the root directory, as doing so requires root access; but you may store it in any location you set within KEY_FILE. 
