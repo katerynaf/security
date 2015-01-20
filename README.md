@@ -59,19 +59,22 @@ In a production environment, importing this module will automatically decrypt an
           
     7. Use GIT to 'push-to-deploy' to your production environments. You're done!  
        
-## Important!
-
-    The files security.rc4 and _passwords.py are in the repo for demonstration purposes only!  
-    Do NOT include your private key (security.rc4) or raw passwords (_passwords.py) in your repo.  
-  
 ## Technical notes 
  
+#### Important!
+  
+    A private key file (security.rc4) and raw password file (_passwords.py) are included 
+    in this repository for demonstration purposes only. Do NOT include those files in
+    your own repo. Install security.rc4 in your root directory and exclude _passwords.py
+    from the repo in your .gitignore file.  
+  
+
 #### Encryption
   
-Encryption is implemented with the standard RC4 algorithm. You need to provide a file with a long sequence of ASCII characters in it as a private encryption key. You should store your key (your private sequence of ASCII characters) in a local file as defined in KEY_FILE. You may want to store this file in the root directory, as that demonstrates root access to the system (although you may chaneg the location). Alternatively, you may provide access to the key from a restricted server (as defined in KEY_URL). If you provide access to your key by URL, you should (obviously) authenticate and restrict access.  
-  
+Encryption is implemented with the standard RC4 algorithm. Generate a long, random sequence of ASCII characters and save it into a local file (as defined by the constant KEY_FILE; see the file security.rc4 as an example). You may want to store this file in the root directory, as doing so requires root access; but you may store it in any location you set within KEY_FILE. 
+
 #### Google Compute Engine  
   
-This application works with Google Compute Engine. Store your private key in the Google metadata server as defined by the METADATA_KEY -- this module will then automatically (and securely) obtain your private key from the metadata server. You can revoke or change the key with minimal downtime. Google automatically enforces access rights and permissions for the metadata server.
+This application was initially developed for Google Compute Engine. Store your private key in the Google metadata server (with the private URL defined in METADATA_KEY). This application will automatically (and securely) request your private key from the metadata server. Google automatically enforces access rights and permissions for the metadata server. The advantage of this approach is that you can maintain your private key in just one location (to be used by many GCE instances), and then revoke or change the key with minimal disruption. 
   
  
