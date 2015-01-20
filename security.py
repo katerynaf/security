@@ -1,6 +1,9 @@
 """Encrypt, decrypt, and import python variables into the global namespace.
 
-See README.md for documentation. See LICENSE for terms.
+    Copyright (c) 2014, Kenneth A Younge
+    See README.md for documentation.
+    See LICENSE for terms and conditions.
+
 """
 __module__    = 'security.py'
 __author__    = "Kenneth A Younge"

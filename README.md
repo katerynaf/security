@@ -2,7 +2,9 @@
 
 This application encrypts, decrypts, and imports Python variables (often passwords) into the global namespace. It gives you a simple (but secure) way to store private information (such as passwords) along with your Python code, and then use that information within a production environment. The code is pure Python and has no third-party dependencies. Your unencrypted secrets never go over the wire or touch the production hard drive.
 
-    Implementation is as simple as:       from security import *
+Implementation is as simple as:
+
+    from security import *
 
 ## Description
 
@@ -14,7 +16,7 @@ Encryption is implemented with the standard RC4 algorithm. You need to provide a
 
 This application works with Google Compute Engine. Store your private key in the Google metadata server as defined by the METADATA_KEY -- this module will then automatically (and securely) obtain your private key from the metadata server. You can revoke or change the key with minimal downtime. Google automatically enforces access rights and permissions for the metadata server.
   
-## Installation & use
+## Instructions
 
     1. Make a private key, such as:  
     
@@ -57,4 +59,8 @@ This application works with Google Compute Engine. Store your private key in the
           
     7. Use GIT to 'push-to-deploy' to your production environments. You're done!  
        
-    
+## Important!
+
+    The files security.rc4 and _passwords.py are in the repo for demonstration purposes only! You should NOT include your private key (security.rc4) or raw password file (_passwords.py) in your repository.  
+  
+   
