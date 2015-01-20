@@ -1,6 +1,6 @@
 ## Overview
 
-This application encrypts, decrypts, and imports Python variables (often passwords) into the global namespace. It gives you a simple (but secure) way to store private information (such as passwords) along with your Python code, and then use that information within a production environment. The code is pure Python and has no third-party dependencies. Your unencrypted secrets never go over the wire or touch the production hard drive.
+This application encrypts, decrypts, and imports Python variables (often passwords) into the global namespace. It gives you a simple (but secure) way to store private information alongside your Python code, and then use that information within a production environment. The code is pure Python, has no third-party dependencies, and requires almost no recoding of your program. Unencrypted secrets never go over the wire or touch a production hard drive.
 
 Implementation is as simple as:
 
@@ -8,8 +8,12 @@ Implementation is as simple as:
 
 ## Description
 
-In a development environment, importing this module will automatically encrypt all of the raw files listed in RAW_FILES, and save an encrypted version of each file to disk. I suggest you add _ as a prefix before each raw file name (for unencrypted and thus insecure information). Then add _* to your .gitignore file, and git will automatically exclude files starting with _ from your repository. The default configurations refers to the file: _passwords.py
+#### During development  
 
+In a development environment, importing this module will automatically encrypt all of the raw files listed in RAW_FILES, and save an encrypted version of each file to disk. I suggest you add _ as a prefix before each raw file name (for unencrypted and thus insecure information). Then add _* to your .gitignore file, and git will automatically exclude files starting with _ from your repository. The default configurations refers to the file: _passwords.py
+  
+#### During Production  
+  
 In a production environment, importing this module will automatically decrypt and then import all python code (usually constants) from the original raw .py file (for example, from _passwords.py). The module will import all references into the global namespace, so you may then reference secured variables as you normally would in Python. The module assumes that it is in a production environment unless it is running on a machine listed in DEV_MACHINES. 
 
 Encryption is implemented with the standard RC4 algorithm. You need to provide a file with a long sequence of ASCII characters in it as a private encryption key. You should store your key (your private sequence of ASCII characters) in a local file as defined in KEY_FILE. You may want to store this file in the root directory, as that demonstrates root access to the system (although you may chaneg the location). Alternatively, you may provide access to the key from a restricted server (as defined in KEY_URL). If you provide access to your key by URL, you should (obviously) authenticate and restrict access.  
