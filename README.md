@@ -1,12 +1,12 @@
-OVERVIEW
---------
+## OVERVIEW
+-----------
 
     Module encrypts, decrypts, and imports variables into the global namespace.
     This provides a simple, but secure, way to store passwords in Python.
 
 
-DESCRIPTION:
-------------
+## DESCRIPTION:
+---------------
 
     This module automatically encrypts a file (named in CONFIG_FILE) during development, and decrypts/imports it 
     (i.e., executes it) during production. Module assumes that it is in production, unless it is running on one 
@@ -28,14 +28,14 @@ DESCRIPTION:
     access rights and priviledges to the metadata server.
 
 
-REQUIREMENTS:
--------------
+## REQUIREMENTS:
+----------------
 
     Pure Python. No dependencies. 
     Code imports os and urllib2, but you may drop urllib2 if you always use a local private key file. 
 
-HOW TO USE:
------------
+## HOW TO USE:
+--------------
 
     1. Copy this file (security.py) from GitHub into your project directory.  
 
