@@ -6,7 +6,7 @@ This "security" application encrypts, decrypts, and imports Python variables int
 simple (but secure) way to store passwords and other private information that your Python code needs to use in a
 production environment. It works through a simple import call. The code is pure Python with no third-party dependencies.
 
-## Description:
+## Description
 
 Importing this module in a development environment will automatically encrypt raw files (as listed in RAW_FILES) and
 save an encrypted version of each file to disk. Prefix the name of each raw (unencrypted) file with "_"
@@ -69,12 +69,12 @@ import urllib2
 
 DEV_MACHINES  =  ['Kens-MacBook-Pro-3.local', ]  # authorized development machines
 RAW_FILES     =  ['_passwords.py', ] # list of unencrypted files needing encryption
-KEY_FILE      =  'patrf.rc4'  # filename of a private key stored in root ( / )
+KEY_FILE      =  '/security.rc4'  # filename of private key -- generally stored in root
 KEY_URL       =  'http://metadata.google.internal/computeMetadata/v1/project/attributes/rc4'
 
 try:     KEY  =  urllib2.urlopen(urllib2.Request( KEY_URL,
                     headers={ 'Metadata-Flavor' : 'Google' })).read()
-except:  KEY  =  open('/' + KEY_FILE, 'r').read()
+except:  KEY  =  open(KEY_FILE, 'r').read()
 
 def crypt(data, key):
     x = 0
@@ -113,6 +113,6 @@ for rawname in RAW_FILES:
             line = str(line).strip()
             if line:
                 try: exec line in globals()
-                except: 'Warning - you may have a coding error in ' + rawname + '  Code can NOT span lines.'
+                except: 'Warning - you may have a coding error in ' + rawname + '  Note that code can NOT span lines.'
     except Exception as e:
         print 'Unable to import ' + rawname + ': ' + str(e)

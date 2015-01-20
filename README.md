@@ -1,19 +1,20 @@
 ## Overview
 
-This "security" application encrypts, decrypts, and imports Python variables into the global namespace. It gives you a simple (but secure) way to store passwords and other private information that your Python code needs to use in a production environment. It works through a simple import call. The code is pure Python with no third-party dependencies.
+This application encrypts, decrypts, and imports Python variables (often passwords) into the global namespace. It gives you a simple (but secure) way to store private information (such as passwords) along with your Python code, and then use that information within a production environment. The code is pure Python and has no third-party dependencies.
 
-## Description:
+    Implementation is as simple as:       from security import *
 
-Importing this module in a development environment will automatically encrypt all fo the raw files listed in RAW_FILES, and save an encrypted version of each file to disk. I suggest adding the prefix _ to each raw (unencrypted) file (for example: _settings.py). If you then add _* to your .gitignore file, git will exclude unencrypted versions of raw files from your repository. 
+## Description
 
-Importing this module in a production environment will automatically decrypt and then import all code & variables from the original raw file. It will import all references into the global namespace so you may then reference those variables as you normally would in Python. The module assumes that it is in a production environment unless it is running on a machine listed in the DEV_MACHINES. 
+In a development environment, importing this module will automatically encrypt all of the raw files listed in RAW_FILES, and save an encrypted version of each file to disk. I suggest adding the prefix _ to each raw (unencrypted) file (for example: _settings.py). If you then add _* to your .gitignore file, git will exclude unencrypted versions of raw files from your repository. 
 
-Encryption is implemented with the standard RC4 algorithm. You need to provide a file with a long sequence of ASCII chars in it to serve as your private encryption key. You should store your private key file (as defined in KEY_FILE) in the root directory (demonstrating root access), or you should provide access to the key from a restricted server (as defined in KEY_URL). If you provide access to your key by URL, you should (obviously) authenticate and restrict access.  
+In a production environment, importing this module will automatically decrypt and then import all python code (usually constants) from a raw .py file. It will import all references into the global namespace so you may then reference those variables as you normally would in Python. The module assumes that it is in a production environment, unless it is running on a machine listed in DEV_MACHINES. 
 
-This code was developed with Google Compute Engine in mind. You can store your private key in the Google metadata server and define the URL to it in METADATA_KEY. Your entire project will then have access to your private key and you can revoke or change the key centrally, with minimal downtime. Google automatically enforces access rights to the metadata server.
+Encryption is implemented with the standard RC4 algorithm. You need to provide a file with a long sequence of ASCII characters in it as a private encryption key. You should store your key (your private sequence of ASCII characters) in a local file as defined in KEY_FILE. You may want to store this file in the root directory, as that demonstrates root access to the system (although you may chaneg the location). Alternatively, you may provide access to the key from a restricted server (as defined in KEY_URL). If you provide access to your key by URL, you should (obviously) authenticate and restrict access.  
+
+This application works with Google Compute Engine. Store your private key in the Google metadata server as defined by the METADATA_KEY -- this module will then automatically (and securely) obtain your private key from the metadata server. You can revoke or change the key with minimal downtime. Google automatically enforces access rights and permissions for the metadata server.
   
-  
-## Installation & use:
+## Installation & use
 
     1. Copy this file (security.py) from GitHub into your project directory.  
 
