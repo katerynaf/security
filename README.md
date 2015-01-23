@@ -10,9 +10,9 @@ Implementation is as simple as:
 
 #### Development  
 
-In a development environment, importing security.py will automatically encrypt all of the raw files listed in RAW_FILES, and save an encrypted version of each to disk. I suggest you add _ before each raw file name to indicate insecure information; then add _* to your .gitignore file to automatically exclude those files from your repository.  
+In a development environment, importing security.py will automatically encrypt all of the raw files listed in RAW_FILES, and save an encrypted version of each to disk. You may want to add _ before each raw file name (to indicate insecure information) and then add those files to .gitignore to exclude them from your repository.  
   
-For example, the application is pre-configured to encrypt _passwords.py (included in this repo for demonstration purposes - do not include the raw password file in your own repo). The file _passwords.py will be encrypted into passwords.py every time you execute your program in your production environment (as defined in DEV_MACHINES).
+For example, the application is pre-configured to encrypt _passwords.py (included in this repo for demonstration purposes - do not include the raw password file in your own repo). The file _passwords.py will be encrypted into the file passwords.py every time you execute your program in your production environment (as defined in DEV_MACHINES).
   
 #### Production  
   
