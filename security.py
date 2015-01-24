@@ -17,11 +17,8 @@ import urllib2
 DEV_MACHINES  =  ['Kens-MacBook-Pro-3.local', 'kens-mbp-3.mgmt.purdue.edu']  # authorized development machines
 RAW_FILES     =  ['_passwords.py', ] # list of unencrypted files needing encryption
 KEY_FILE      =  '/security.rc4'  # filename of private key -- generally stored in root
-KEY_URL       =  'http://metadata.google.internal/computeMetadata/v1/project/attributes/rc4'
 
-try:     KEY  =  urllib2.urlopen(urllib2.Request( KEY_URL,
-                    headers={ 'Metadata-Flavor' : 'Google' })).read()
-except:  KEY  =  open(KEY_FILE, 'r').read()
+KEY = open(KEY_FILE, 'r').read()
 
 def crypt(data, key):
     x = 0

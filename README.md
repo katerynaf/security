@@ -18,7 +18,7 @@ For example, the application is pre-configured to encrypt _passwords.py (include
   
 In a production environment, importing security.py will automatically decrypt and execute the origianl python file, effectively putting all objects and constants into the global namespace.  
 
-For exqample, if you define python variable constants in _passwords.py, then those variables may then be directly referenced within your code. The module assumes that it is in a production environment unless it is running on a machine listed in DEV_MACHINES. 
+For example, if you define python variable constants in _passwords.py, then those variables may then be directly referenced within your code. The module assumes that it is in a production environment unless it is running on a machine listed in DEV_MACHINES. 
   
 See hello_world.py for a working example.
   
@@ -26,65 +26,60 @@ See hello_world.py for a working example.
 
 ##### Step-by-step instructions to get started
 
-    1. Make a text-based private key. For example:  
+    1. Make a private key as a string of ASCII characters. 
+       For example:  
     
             kksdhfs984y5hbswfd8WEZJD8asdhasi!JHADHjasbd78asjdai  
           
-       Save key into the root dir of your development and production machines. For example:  
+       Save the ASCII characters into a file in a secure directory on both your development and production machines. 
+       For example, you could save it into a file in the root directory (which requires root permission):  
           
             /key.rc4  
-          
-       And/or save your key into the Google metadata server (optional - if you use GCE):  
-       
-            http://metadata.google.internal/computeMetadata/v1/project/attributes/rc4  
-    
-    2. Copy security.py from GitHub into your project.  
+              
+    2. Copy the module file security.py from GitHub into your project, and import it into your project.  
 
-    3. Add the following line of code to your main program:  
+          from security import *       (import it into your global namespace with the asterisk)
 
-          from security import *   
-
-    4. Trick dev UI (at least PyCharm) to provide code completion during development. 
-       This does not affect production, as _passwords.py should not exist in production.
+    3. (optional) Trick your development UI (e.g., PyCharm) to provide code completion during development. 
 
             try: from _passwords import *  
             except: pass  
 
-    5. Store private information (such as passwords) as regular python variable assignments  
-       in a raw .py file. The default setup assumes you use the file _passwords.py:  
+        Note that the above should not affect production, as _passwords.py should not exist in production.
+
+    4. Store your private information (such as passwords) as regular python variable assignments in a .py file. 
+       For example, the default setup assumes that you are using the raw file _passwords.py to hold secrets:  
 
             MYSQL_PASSWORD = MyExample!password4   
             SENDGRID_PWD = THisIS_my44sendgridpwd   
             LOGGLY_URL = 'http://logs-01.loggly.com/inputs/00-00-00-00-00/'   
         
-    6. Execute your regular program on your dev machine to encrypt your secret info. The
-       import statement (step # 3 above) will auto run security.py and encrypt your info.
-       This converts the raw info in _passwords.py into encrypted info in passwords.py
+    6. Executing the ( from security import * ) statement above will automatically encrypt your secret info. 
+       For example, running your program with the above will convert the raw _passwords.py into encrypted passwords.py
           
-    7. Use git to 'push-to-deploy' to production machines. Do NOT include your private
-       key in your repo (i.e., exclude the file security.rc4), and do not include your
-       raw (unsecure) files in your repo (i.e., exclude the file _passwords.py). 
+    7. Use git to 'push-to-deploy.' Do NOT include your private key in your repo (i.e., exclude security.rc4).
+       Do not include your raw (un-encrypted) files in your repo (i.e., _passwords.py). 
        
-       The files security.rc4 and _passwords.py are included here only as example files.
+       security.rc4 and _passwords.py are included in THIS repo as examples - exclude them from YOUR repo.  
     
-    You are done!    
+    You're done!    
   
   
 ## Technical notes 
  
 #### Encryption
   
-Encryption is implemented with the standard RC4 algorithm. Generate a long, random sequence of ASCII characters and save it into a local file (as defined by the constant KEY_FILE; see the file security.rc4 as an example). You may want to store this file in the root directory, as doing so requires root access; but you may store it in any location you set within KEY_FILE. 
+Encryption is implemented with the standard RC4 algorithm. Generate a long, random sequence of ASCII characters and save it into a local file (as defined by the constant KEY_FILE; see the file security.rc4 as an example). You may want to store this file in the root directory, as doing so requires root access; but you may store it in any location you specify within KEY_FILE. 
 
-#### Google Compute Engine  
-  
-This application was initially developed for Google Compute Engine. Store your private key in the Google metadata server (with the private URL defined in METADATA_KEY). This application will automatically (and securely) request your private key from the metadata server. Google automatically enforces access rights and permissions for the metadata server. The advantage of this approach is that you can maintain your private key in just one location (to be used by many GCE instances), and then revoke or change the key with minimal disruption. 
-  
 #### Disclaimer
 
-I use this code myself on a project for Google Compute Engine and find it works well. I'm posting the code as *_pay-it-forward_* for the many sections of code I use from others. This is NOT a formal application - there is *no support* - there are no guarantees - use it at your own risk. Feel free to fork the repo, improve the code, and push it back.
+I use this code in a project for Google Compute Engine and find it works well. I'm posting it to *_pay-it-forward_* for the many sections of code I have borrowed from others. This is NOT a formal application, so there is *no support,* no guarantees, and you agree to use it at your own risk. Feel free to fork the repo and improve the code - if you do so, please submit it back!
  
 #### Version History
+
+Version 1.01 - January 23, 2015
+
+  * Simplified the code by removing the google metadata server options.
 
 Version 1.0 - January 20, 2015
 
