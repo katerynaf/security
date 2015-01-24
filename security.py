@@ -12,13 +12,9 @@ __license__   = "GNU General Public License"
 __email__     = "kenyounge@gmail.com"
 
 import os
-import urllib2
 
-DEV_MACHINES  =  ['Kens-MacBook-Pro-3.local', 'kens-mbp-3.mgmt.purdue.edu']  # authorized development machines
-RAW_FILES     =  ['_passwords.py', ] # list of unencrypted files needing encryption
-KEY_FILE      =  '/security.rc4'  # filename of private key -- generally stored in root
-
-KEY = open(KEY_FILE, 'r').read()
+RC4_KEY = '/security.key'  # filename of private key -- generally stored in root
+FILES   = ['passwords.rc4', ] # list of unencrypted files to encrypt
 
 def crypt(data, key):
     x = 0
@@ -36,26 +32,30 @@ def crypt(data, key):
         out.append(chr(ord(char) ^ box[(box[x] + box[y]) % 256]))
     return ''.join(out)
 
-for rawname in RAW_FILES:
+for fname in FILES:
 
-    securename = rawname[1:]  # change if you use a different naming convention
+    key = open(RC4_KEY, 'r').read()
+    rc4name = fname.replace('.py','.rc4')
 
-    # Encrypt variables and values
+    # Encrypt 
     try:
-        if os.uname()[1] in DEV_MACHINES:
-            with open(rawname, 'r') as f: txt = f.read()
-            txt = crypt(str(txt).strip(), KEY).encode('hex')
-            with open(securename, 'w') as f: f.write(txt)
+        if os.path.exists(fname):
+            with open(fname, 'r') as f: txt = f.read()
+            txt = crypt(str(txt).strip(), key).encode('hex')
+            with open(rc4name, 'w') as f: f.write(txt)
     except Exception as e:
-        print 'Unable to encrypt ' + rawname + ': ' + str(e)
+        print 'Unable to encrypt ' + fname + ' into ' + rc4name + '  Error = ' + str(e)
 
-    # Decrypt and import variables and values
+    # Decrypt 
     try:
-        with open(securename, 'r') as f:
-            txt = crypt(str(f.read()).strip().decode('hex'), KEY)
+        with open(rc4name, 'r') as f:
+            txt = crypt(str(f.read()).strip().decode('hex'), key)
         for line in txt.splitlines():
             line = str(line).strip()
             if line:
-                try: exec line in globals()
-                except: 'Warning - you may have a coding error in ' + rawname + '  Note that code can NOT span lines.'
+                try:
+                    exec line in globals()
+                except:
+                    print('Warning - you may have a coding error in ' + fname +
+                          ' Python code  in ' + fname + ' can NOT span lines!')
     except Exception as e: print str(e)
