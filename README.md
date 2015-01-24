@@ -10,15 +10,13 @@ Implementation is as simple as:
 
 #### Development  
 
-In a development environment, importing security.py will automatically encrypt all of the raw files listed in RAW_FILES, and save an encrypted version of each to disk. You may want to add _ before each raw file name (to indicate insecure information) and then add those files to .gitignore to exclude them from your repository.  
+In a development environment, importing security.py will automatically encrypt all of the raw files listed in FILES, and save an encrypted version of each (ending in *.rc4) to disk. You should add your secure files listed in FILES to .gitignore so that they are excluded from your repository.  
   
-For example, the application is pre-configured to encrypt _passwords.py (included in this repo for demonstration purposes - do not include the raw password file in your own repo). The file _passwords.py will be encrypted into the file passwords.py every time you execute your program in your production environment (as defined in DEV_MACHINES).
+For example, the application is pre-configured to encrypt passwords.py into passwords.rc4. The file passwords.py is included in this github repository for demonstration purposes, but DO NOT include the raw password.py file in your own published repo. The file passwords.py will be encrypted into the file passwords.rc4 every time you execute your program with the `from security import *` in it (and when the raw, unencrypted file is available).
   
 #### Production  
   
-In a production environment, importing security.py will automatically decrypt and execute the origianl python file, effectively putting all objects and constants into the global namespace.  
-
-For example, if you define python variable constants in _passwords.py, then those variables may then be directly referenced within your code. The module assumes that it is in a production environment unless it is running on a machine listed in DEV_MACHINES. 
+In a production environment, importing security.py (with a `from security import *` statement) will automatically decrypt your python file and place all variables into the global namespace. For example, if you define python variable constants in passwords.py, then those variables may then be directly referenced within your code. 
   
 See hello_world.py for a working example.
   
@@ -34,21 +32,22 @@ See hello_world.py for a working example.
        Save the ASCII characters into a file in a secure directory on both your development and production machines. 
        For example, you could save it into a file in the root directory (which requires root permission):  
           
-            /key.rc4  
+            /security.key  
               
     2. Copy the module file security.py from GitHub into your project, and import it into your project.  
 
-          from security import *       (import it into your global namespace with the asterisk)
+          `from security import *`       (import it into your global namespace with the asterisk)
 
     3. (optional) Trick your development UI (e.g., PyCharm) to provide code completion during development. 
 
-            try: from _passwords import *  
-            except: pass  
+            `try: from _passwords import *`  
+            `except: pass`  
 
         Note that the above should not affect production, as _passwords.py should not exist in production.
 
     4. Store your private information (such as passwords) as regular python variable assignments in a .py file. 
-       For example, the default setup assumes that you are using the raw file _passwords.py to hold secrets:  
+       For example, the default setup assumes that you are using the raw file passwords.py to hold secrets. Those
+       secrets should be executable, Python statements (do NOT span lines) such as:
 
             MYSQL_PASSWORD = MyExample!password4   
             SENDGRID_PWD = THisIS_my44sendgridpwd   
