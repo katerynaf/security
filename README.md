@@ -1,65 +1,69 @@
 ## Introduction
 
-This application encrypts, decrypts, and imports Python variables (often passwords) into the global namespace. It gives you a simple (but secure) way to store private information alongside your regular Python code, and then use that information within a production environment. The code is pure Python, has no third-party dependencies, and (probably) requires no re-coding of your program. Unencrypted secrets never go over the wire, nor touch a production hard drive.
+This application encrypts, decrypts, and imports passwords (and other private information) as Python variables in the
+global namespace. It provides a simple and secure way to maintain secrets within regular Python code, and then use 
+those secrets in a production environment. The code is pure Python, has no third-party dependencies, and should
+require no re-coding of your program. Unencrypted secrets never go over the wire or touch a production hard drive.
 
-Implementation is as simple as:
+Implementing this code is as simple as:
 
-    from security import *
+    `from security import *`
 
 ## Description
 
-#### Development  
+#### In the development environment
 
-In a development environment, importing security.py will automatically encrypt all of the raw files listed in FILES, and save an encrypted version of each (ending in *.rc4) to disk. You should add your secure files listed in FILES to .gitignore so that they are excluded from your repository.  
+Importing security.py with `from security import *` will cause every file listed in `FILES` to be automatically 
+encrypted and saved to disk. For example, the code is pre-configured to encrypt the file `passwords.py` into 
+`passwords.rc4`. The file passwords.py is included here for demonstration purposes, but you should NOT include it
+in a public repository or in production. Instead, you should distribute the encrypted file (e.g., `passwords.rc4`) 
+and seperately install your encryption key (`security.key`) on each production machine. The file `passwords.py` 
+will be encrypted into `passwords.rc4` every time the code segment `from security import *` executes in your
+main program in your development environment (i.e., when it can access the raw, unencrypted file for `passwords.py`).
   
-For example, the application is pre-configured to encrypt passwords.py into passwords.rc4. The file passwords.py is included in this github repository for demonstration purposes, but DO NOT include the raw password.py file in your own published repo. The file passwords.py will be encrypted into the file passwords.rc4 every time you execute your program with the `from security import *` in it (and when the raw, unencrypted file is available).
+#### In the production environment  
   
-#### Production  
-  
-In a production environment, importing security.py (with a `from security import *` statement) will automatically decrypt your python file and place all variables into the global namespace. For example, if you define python variable constants in passwords.py, then those variables may then be directly referenced within your code. 
-  
+In a production environment, importing security.py (with a `from security import *` statement) will automatically 
+decrypt your python file and place all variables into the global namespace. For example, if you define python variable 
+constants in passwords.py, then those variables may then be directly referenced within your code. 
 See hello_world.py for a working example.
   
 ## Installation
 
 ##### Step-by-step instructions to get started
 
-    1. Make a private key as a string of ASCII characters. 
-       For example:  
+    1. Make a private key as a string of ASCII characters. For example:  
     
-            kksdhfs984y5hbswfd8WEZJD8asdhasi!JHADHjasbd78asjdai  
+            `kksdhfs984y5hbswfd8WEZJD8asdhasi!JHADHjasbd78asjdai`  
           
-       Save the ASCII characters into a file in a secure directory on both your development and production machines. 
-       For example, you could save it into a file in the root directory (which requires root permission):  
+    2. Save your ASCII characters into a file in a secure directory on both your development and production machines. 
+       For example, save it into the root directory (which requires root permission), as so:  
           
-            /security.key  
+            `/security.key`  
               
-    2. Copy the module file security.py from GitHub into your project, and import it into your project.  
+    2. Copy the file `security.py` from GitHub into your project, and then `import security` into your project.  
 
-          `from security import *`       (import it into your global namespace with the asterisk)
+          `from security import *`    (you SHOULD use the asterisk to import it into your global namespace)
 
-    3. (optional) Trick your development UI (e.g., PyCharm) to provide code completion during development. 
+    3. Trick your development UI (e.g., PyCharm) to provide code completion during development. 
 
-            `try: from _passwords import *`  
+            `try: from passwords import *`  
             `except: pass`  
 
-        Note that the above should not affect production, as _passwords.py should not exist in production.
+        Include error handling becuase the actual file will not exist in production environments.
 
-    4. Store your private information (such as passwords) as regular python variable assignments in a .py file. 
-       For example, the default setup assumes that you are using the raw file passwords.py to hold secrets. Those
-       secrets should be executable, Python statements (do NOT span lines) such as:
+    4. Within `passwords.py` (or other files that you name in FILES), include your secret information as regular 
+       variable statements that are executable within python. Do NOT span lines (each statement must stay on one line).
 
-            MYSQL_PASSWORD = MyExample!password4   
-            SENDGRID_PWD = THisIS_my44sendgridpwd   
-            LOGGLY_URL = 'http://logs-01.loggly.com/inputs/00-00-00-00-00/'   
+            `MYSQL_PASSWORD = MyExample!password4`   
+            `SENDGRID_PWD = THisIS_my44sendgridpwd`   
+            `LOGGLY_URL = 'http://logs-01.loggly.com/inputs/00-00-00-00-00/'`   
         
-    6. Executing the ( from security import * ) statement above will automatically encrypt your secret info. 
-       For example, running your program with the above will convert the raw _passwords.py into encrypted passwords.py
+    6. Include the statement `from security import *` as shown above to automatically encrypt your FILES on your
+       development machine. You must execute your program at least once on your development machine for this to work.
           
-    7. Use git to 'push-to-deploy.' Do NOT include your private key in your repo (i.e., exclude security.rc4).
-       Do not include your raw (un-encrypted) files in your repo (i.e., _passwords.py). 
-       
-       security.rc4 and _passwords.py are included in THIS repo as examples - exclude them from YOUR repo.  
+    7. Use git to 'push-to-deploy' your code. Include the passwords.rc4 file in your deployment (for example), but
+       DO NOT include the origianl unencrypted file (passwords.py for example). 
     
     You're done!    
   
@@ -68,11 +72,16 @@ See hello_world.py for a working example.
  
 #### Encryption
   
-Encryption is implemented with the standard RC4 algorithm. Generate a long, random sequence of ASCII characters and save it into a local file (as defined by the constant KEY_FILE; see the file security.rc4 as an example). You may want to store this file in the root directory, as doing so requires root access; but you may store it in any location you specify within KEY_FILE. 
+Encryption is implemented with the standard RC4 algorithm. Generate a long, random sequence of ASCII characters and 
+save it into a local file (as defined by the constant KEY_FILE; see the file security.rc4 as an example). You may want 
+to store this file in the root directory, as doing so requires root access; but you may store it in any location you 
+specify within RC4_KEY. 
 
 #### Disclaimer
 
-I use this code in a project for Google Compute Engine and find it works well. I'm posting it to *_pay-it-forward_* for the many sections of code I have borrowed from others. This is NOT a formal application, so there is *no support,* no guarantees, and you agree to use it at your own risk. Feel free to fork the repo and improve the code - if you do so, please submit it back!
+I use this code in a project for Google Compute Engine and find it works well. I'm posting it to *_pay-it-forward_* 
+for code I have borrowed from others. There is *no support* and *no guarantees* with this code - so 
+*use it at your own risk*. Feel free to fork the repo and improve the code!
  
 #### Version History
 
