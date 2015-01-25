@@ -56,6 +56,5 @@ for fname in FILES:
                 try:
                     exec line in globals()
                 except:
-                    print('Warning - you may have a coding error in ' + fname +
-                          ' Python code  in ' + fname + ' can NOT span lines!')
+                    print('Error: The python code in ' + fname + ' failed to execute. Be sure you do NOT span lines!')
     except Exception as e: print str(e)
