@@ -1,4 +1,5 @@
-# File included for demo purposes only - DO NOT ADD THE ORIGINAL (raw & unencrypted) FILE TO THE GIT REPO !!
+# This file is included in the repo only as an example for your reference.
+# DO NOT INCLUDE THIS ORIGINAL FILE IN YOUR PUBLIC REPO OR IN PRODUCTION.
 
 MYSQL_PWD = 'MyExample!password4'
 SENDGRID_PWD = 'THisIS_my44sendgridpwd'

@@ -14,7 +14,7 @@ __email__     = "kenyounge@gmail.com"
 import os
 
 RC4_KEY = '/security.key'  # filename of private key -- generally stored in root
-FILES   = ['passwords.rc4', ] # list of unencrypted files to encrypt
+FILES   = ['passwords.py', ] # list of unencrypted files to encrypt
 
 def crypt(data, key):
     x = 0
