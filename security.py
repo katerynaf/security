@@ -54,7 +54,8 @@ for fname in FILES:
             line = str(line).strip()
             if line:
                 try:
-                    exec line in globals()
+                    if not line.startswith('#'):
+                        exec line in globals()
                 except:
                     print('Error: The python code in ' + fname + ' failed to execute. Be sure you do NOT span lines!')
     except Exception as e: print str(e)
