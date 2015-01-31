@@ -82,7 +82,7 @@ variable `HELLO_WORLD` is now available as a global variable at runtime.
      
 12. Add your `_private/` directory to `.gitignore` file to keep private files and your security key out of the GIT repo. 
        
-That's the 12-step plan - you're done!    
+    **That's the 12-step plan - you're done!**      
   
   
 ## Technical notes 
