@@ -43,11 +43,13 @@ def secure(file_names=('passwords.py',), key_name='security.key', key_path='~/',
         verbose    --  False
     """
 
-    # Load key     (try production location first, otherwise the private directory during development)
+    # Load key (try production location first)
     if os.path.exists(os.path.join(key_path, key_name)):
         key = open(os.path.join(key_path, key_name), 'r').read()
-    else:
+    elif os.path.exists(os.path.join(os.path.dirname(__file__), pvt_path + key_name)):
         key = open(os.path.join(os.path.dirname(__file__), pvt_path + key_name), 'r').read()
+    else:
+        key = open(os.path.join(os.path.dirname(__file__), key_name), 'r').read()
 
     # secure each file
     for filename in file_names:
