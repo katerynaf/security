@@ -44,12 +44,12 @@ variable HELLO_WORLD is now available at runtime.
     `security.key`  
     
 3. On development machines, the solution is preconfigured for you to save your security.key into a sub-directory 
-       called `private/` within your current project directory, but you may save it anywhere you wish and specify the 
-       path in your call to `security.secure()`  
+   called `private/` within your current project directory, but you may save it anywhere you wish and specify the 
+   path in your call to `security.secure()`  
   
 4. On production machines, install the security.key file in a secure location. The solution is preconfigured for 
-       you to save your security.key in your user home directory, although I tend to save it the root directory because
-       that implies root access.  
+   you to save your security.key in your user home directory, although I tend to save it the root directory because
+   that implies root access.  
       
 5. Copy the main `security.py` file from GitHub and place it within your project. You may also want to copy the
        _private directory and it's contents to help get you started (but be sure to change the example security.key !)  
@@ -59,26 +59,26 @@ variable HELLO_WORLD is now available at runtime.
     `import security`  
     `security.secure()`  
   
-8. (optional) Trick your development environment to provide code completion (e.g., you use PyCharm): 
+8. (optional) Trick your development environment to provide code completion (e.g., PyCharm): 
   
     `try: from _private.passwords import *`  
     `except: pass`  
   
-Include error handling in the import above because the original file should NOT exist in your production 
-environment and thus the import will fail in your production environment. The exact coding of the above depends 
-on whether you use a private directory to store your secret files (the above is the default configuration).
+    Include error handling in the import above because the original file should NOT exist in your production 
+    environment and thus the import will fail in your production environment. The exact coding of the above depends 
+    on whether you use a private directory to store your secret files (the above is the default configuration).
   
 9. Store your secret information as Python variable statements in a standard python file. Do NOT span lines -- this
-is a limitation of the program, although someone could easily revise the code to handle multiple lines with a
-little bit of work. For example, your passwords.py file might look something like:
+   is a limitation of the program, although someone could easily revise the code to handle multiple lines with a
+   little bit of work. For example, your passwords.py file might look something like:
          
     `MYSQL_PASSWORD = "MyExample!password4"`  
     `SENDGRID_PWD = "THisIS_my44sendgridpwd"`  
     `LOGGLY_URL = "http://logs-01.loggly.com/inputs/00-00-00-00-00/"`
         
-6. Deploy your code (maybe use 'push-to-deploy' and git). Include the encrypted files (such as passwords.rc4) in 
-your deployment, but DO NOT include the original (unencrypted) files in the deployment or in your GIT repo. 
-Use the `.gitignore` file to keep the original private files and your security key out of the GIT repo! 
+10. Deploy your code (maybe use 'push-to-deploy' and git). Include the encrypted files (such as passwords.rc4) in 
+    your deployment, but DO NOT include the original (unencrypted) files in the deployment or in your GIT repo. 
+    Use the `.gitignore` file to keep the original private files and your security key out of the GIT repo! 
        
 You're done!    
   
