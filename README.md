@@ -34,55 +34,55 @@ variable `HELLO_WORLD` is now available as a global variable at runtime.
   
 ## Installation & Programming
 
-1. Clone this GitHub repo. (Alternatively, you really only need to security.py file and can configure everything else.)
+1. Clone this GitHub repo (or grab `security.py` and re-configure everything else).
 
-2. Make a private key from ASCII characters. For example:  
+2. Make a private key out of ASCII characters. For example:  
     
     `kksdhfs984y5hbswfd8WEZJD8asdhasi!JHADHjasbd78asjdai`  
           
-3. Save your private key into a `security.key` file.
+3. Save your private key into the file: `security.key`  
     
-4. On development machines, the code is pre-configured for you to save `security.key` into the `private/` 
-   subdirectory within your current project directory, but you may save it anywhere you wish and then specify the 
-   path when you call `security.secure()`  
+4. The code is pre-configured for development machines to access `security.key` from the `private/` subdirectory of
+   your current project directory, but you may save it anywhere you wish and specify the path when you call 
+   `security.secure()`  
   
-5. On production machines, install the `security.key` file in a **secure location**. Do NOT include the encryption key
-   in push-to-deploy configurations or your GitHub repo. Instead, manually install the `security.key` file into a 
-   secure location on the production machine(s).  The code is preconfigured to find the `security.key` file in your 
-   user home directory, although I tend to override that settings and save my security key in the root directory 
-   because that implies root access.  
+5. On production machines, install the `security.key` file in a secure location on the production machine.
+   Do NOT include the encryption key in your push-to-deploy sets or GitHub repo. Instead, install the `security.key` 
+   file into a **secure location** on the production machines.  The code is pre-configured to find the `security.key` 
+   file in the user home directory, although I override that setting and save my security key in the root directory, as 
+   that requires root access (but you may not have access to root). 
       
-6. Add the following two lines to your main program:  
+6. Add the following two lines of code to your program:  
   
-    `import security`  
-    `security.secure()`  
+    `import security`
+    `for line in security.secure(): exec line in globals()`
   
 8. (optional) Trick your development environment to provide code completion (e.g., PyCharm): 
   
     `try: from _private.passwords import *`  
     `except: pass`  
   
-    Include error handling in the code above because the original file should NOT exist in your production environment
-    and the above import will therefore fail in your production environment. The exact coding above will depend 
-    on how/where you store files (the above works for the default configuration).
+    Include error handling in the code above because `_private.passwords` should NOT exist on your production machine
+    and the import will therefore fail. You may change the setting of `_private/` when you call `security.secure()`
   
-9. Store your secret information as Python variable statements in a standard python file. Do NOT span lines -- this
-   is a limitation of the program. With a little work, someone could revise the code to handle multiple lines, but this
-   works for my needs (I store all of my secrets as single-lined variables). For example, a passwords.py file might 
-   look something like:
+9. Store your secrets as standard Python variable statements in one or more Python files. Do NOT span lines in your
+   variable statements. This is a limitation of the program, although someone could revise the code to handle multiple 
+   lines with a little bit of work. A `passwords.py` file. for example, might look something like:
          
     `MYSQL_PASSWORD = "MyExample!password4"`  
     `SENDGRID_PWD = "THisIS_my44sendgridpwd"`  
     `LOGGLY_URL = "http://logs-01.loggly.com/inputs/00-00-00-00-00/"`
         
-10. Deploy your code (maybe use 'push-to-deploy' and git). Include encrypted files (such as `passwords.rc4`) in your
-    deployment, but DO NOT include unencrypted files from the `_private/` directory, nor your `security.key` file, in 
-    the deployment. You should deploy the `security.key` file manually as noted in step 4 above. 
+10. Deploy your code. Include encrypted files such as `passwords.rc4` in your deployment, but **do not** include 
+    unencrypted files from the `_private/` directory, or your `security.key` file, in the deployment. 
     
-    I install my `security.key` file in a custom Ubuntu Image that I use on Google Compute Engine; it is then available 
-    to all instances. Use the `.gitignore` file to keep private files and your security key out of the GIT repo. 
+11. Deploy the `security.key` file manually as noted in step 4 above. I install my `security.key` file in a custom 
+    Ubuntu Image that I use on Google Compute Engine - it then is available to every instance that I start, and I figure
+    that if someone can hack the central Google repository of images, we are all doomed. 
+     
+12. Add your `_private/` directory to `.gitignore` file to keep private files and your security key out of the GIT repo. 
        
-You're done!    
+That's the 12-step plan - you're done!    
   
   
 ## Technical notes 
