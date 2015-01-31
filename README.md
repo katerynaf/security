@@ -76,9 +76,11 @@ variable HELLO_WORLD is now available at runtime.
     `SENDGRID_PWD = "THisIS_my44sendgridpwd"`  
     `LOGGLY_URL = "http://logs-01.loggly.com/inputs/00-00-00-00-00/"`
         
-10. Deploy your code (maybe use 'push-to-deploy' and git). Include the encrypted files (such as passwords.rc4) in 
-    your deployment, but DO NOT include the original (unencrypted) files in the deployment or in your GIT repo. 
-    Use the `.gitignore` file to keep the original private files and your security key out of the GIT repo! 
+10. Deploy your code (maybe use 'push-to-deploy' and git). Include encrypted files (such as passwords.rc4) in your
+    deployment, but DO NOT include unencrypted files from `_private/` (or your `security.key` file) in the deployment. 
+    You should deploy the `security.key` file manually as noted in step 4 above. For example, I install the
+    `security.key` file in the custom Ubuntu Image that I use on Google Compute Engine so it is available to all
+    instances. Use the `.gitignore` file to keep the original private files and your security key out of the GIT repo. 
        
 You're done!    
   
