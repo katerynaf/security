@@ -3,7 +3,7 @@
 This application encrypts, decrypts, and imports passwords and other secret information. It provides a simple but secure 
 way to maintain secret information within regular Python files (`.py` files), and then access that information
 by referencing variables in the global namespace. The code is pure Python, has no third-party dependencies, and 
-should require almost no re-coding of your program. Unencrypted secrets are never saved to a production hard-drive.
+should require almost no re-coding of your program. Unencrypted secrets are never stored on a production hard-drive.
 
 Implementation is as simple as:
   
@@ -15,17 +15,17 @@ Implementation is as simple as:
 
 #### Development
 
-When you call `import security` and run `security.secure()` in a development environment, this solution will 
-automatically *encrypt* a list of python files into a secure format with a `*.rc4` extension. By default, the 
-`security.secure()` function will encrypt the file `private/passwords.py` and store the encrypted copy `passwords.rc4` 
-in your current project directory. Be sure to execute `import security` and `security.secure()` each time you change 
-your private information. When you include the two lines of code shown above in your main program, it will automatically 
-re-synchronize your files each time you run your program in your development environment.
+When you call `import security` and run `security.secure()` in a development environment, the code will automatically 
+**encrypt** a list of python files into a secure format with a `*.rc4` extension. By default, the `security.secure()` 
+function will encrypt the file `private/passwords.py` within your project directory, and store the encrypted file
+`passwords.rc4` in the current project directory. Be sure to execute `import security` and `security.secure()` each time 
+you change your private information. When you include the two lines of code shown above in your main program, it will 
+automatically re-synchronize your files each time you run your program in your development environment.
   
 #### Production  
   
 When you call `import security` and run `security.secure()` in a production environment, this solution will 
-automatically *decrypt* and *import* your original (private) file by placing variables from that file into your
+automatically **decrypt** and **import** your original (private) file by placing variables from that file into your
 global namespace. Unencrypted secrets never go over the wire and never touch a production hard drive. You can simply 
 reference your secrets by using regular python variable names. 
 
