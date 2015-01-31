@@ -1,20 +1,12 @@
-"""Encrypt, decrypt, and import python variables into the global namespace.
-
-    Copyright (c) 2014, Kenneth A Younge
-    See README.md for documentation.
-    See LICENSE for terms and conditions.
-
-"""
-__module__    = 'security.py'
-__author__    = "Kenneth A Younge"
-__copyright__ = "Copyright (c) 2014, Kenneth A Younge"
-__license__   = "GNU General Public License"
-__email__     = "kenyounge@gmail.com"
+"""Secure python variables by encrypting, decrypting, and importing them into the global namespace."""
+__module__ = 'security.py'
+__author__ = "Kenneth A Younge"
+__copyright__ = "Copyright (c) 2014, Kenneth A. Younge"
+__license__ = "GNU General Public License"
+__email__ = "kenyounge@gmail.com"
 
 import os
 
-RC4_KEY = '/security.key'  # filename of private key -- generally stored in root
-FILES   = ['/myproj_directory/passwords.py', ] # list of unencrypted files to encrypt
 
 def crypt(data, key):
     x = 0
@@ -32,30 +24,64 @@ def crypt(data, key):
         out.append(chr(ord(char) ^ box[(box[x] + box[y]) % 256]))
     return ''.join(out)
 
-for fname in FILES:
 
-    key = open(RC4_KEY, 'r').read()
-    rc4name = fname.replace('.py','.rc4')
+def secure(file_names=('passwords.py',), key_name='security.key', key_path='~/', pvt_path='_private/', verbose=False):
+    """Transform files (encrypt and/or decrypt _private files).
 
-    # Encrypt 
-    try:
-        if os.path.exists(fname):
-            with open(fname, 'r') as f: txt = f.read()
-            txt = crypt(str(txt).strip(), key).encode('hex')
-            with open(rc4name, 'w') as f: f.write(txt)
-    except Exception as e:
-        print 'Unable to encrypt ' + fname + ' into ' + rc4name + '  Error = ' + str(e)
+    Keyword arguments:
+        filenames  --  sequence of file names to encrypt/decrypt
+        key_name   --  file name of your personal rc4 encryption key
+        key_path   --  location of encryption key on production machines
+        pvt_path   --  location of private files and encryption key during development
+        verbose    --   print info
 
-    # Decrypt 
-    try:
-        with open(rc4name, 'r') as f:
-            txt = crypt(str(f.read()).strip().decode('hex'), key)
-        for line in txt.splitlines():
-            line = str(line).strip()
-            if line:
-                try:
-                    if not line.startswith('#'):
-                        exec line in globals()
-                except:
-                    print('Error: The python code in ' + fname + ' failed to execute. Be sure you do NOT span lines!')
-    except Exception as e: print str(e)
+    Defaults:
+        filenames  --  passwords.py         a tuple with just one file
+        key_name   --  security.key
+        key_path   --  ~/                   the user home directory; change to root '/' for tighter security
+        pvt_path   --  _private/
+        verbose    --  False
+    """
+
+    # Load key     (try production location first, otherwise the private directory during development)
+    if os.path.exists(os.path.join(key_path, key_name)):
+        key = open(os.path.join(key_path, key_name), 'r').read()
+    else:
+        key = open(os.path.join(os.path.dirname(__file__), pvt_path + key_name), 'r').read()
+
+    # secure each file
+    for filename in file_names:
+
+        filename_raw = os.path.join(os.path.dirname(__file__), pvt_path + filename)
+        filename_rc4 = os.path.join(os.path.dirname(__file__), os.path.basename(filename).replace('.py', '.rc4'))
+
+        # Encrypt
+        try:
+            if os.path.exists(filename_raw):
+                with open(filename_raw, 'r') as f:
+                    text = f.read()
+                with open(filename_rc4, 'w') as f:
+                    f.write(crypt(str(text).strip(), key).encode('hex'))
+                if verbose:
+                    print 'Encrypted ' + filename_raw
+            else:
+                print('File (' + filename_raw + ') not found')
+        except Exception as e:
+            print(str(e))
+
+        # Decrypt
+        try:
+            if os.path.exists(filename_rc4):
+                with open(filename_rc4, 'r') as f:
+                    text = crypt(str(f.read()).strip().decode('hex'), key)
+                    for line in [str(line).strip() for line in text.splitlines()]:
+                        try:
+                            exec line in globals()
+                        except Exception as e:
+                            print(str(e))
+                if verbose:
+                    print 'Imported ' + filename_rc4
+            else:
+                print('File ' + filename_rc4 + ' not found')
+        except Exception as e:
+            print(str(e))

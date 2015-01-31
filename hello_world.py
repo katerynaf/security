@@ -1,6 +1,8 @@
-"""Hello world example using the security module"""
+"""Hello World example using the security module"""
 
-from security import *
-try: from passwords import *   # trick PyCharm into providing code completion
+import security
+security.secure()
+try: from _private.passwords import *            # trick PyCharm to provide code completion
 except: pass
-print(HELLO_WORLD)
+
+print(HELLO_WORLD)    # HELLO_WORLD is a variable defined in the original passwords.py file
