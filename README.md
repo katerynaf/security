@@ -105,14 +105,6 @@ Version 1.03 - January 31, 2015
 
   * Completely restructured code to import silently and then encrypt/decrypt with a call to `security.secure()`.
 
-Version 1.02 - January 24, 2015
-
-  * Changed the names of constants and the involved files to make them more consistent.
-
-Version 1.01 - January 23, 2015
-
-  * Simplified the code by removing the google metadata server options.
-
 Version 1.0 - January 20, 2015
 
   * Initial release.
