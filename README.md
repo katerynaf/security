@@ -24,10 +24,11 @@ automatically re-synchronize your files each time you run your program in your d
   
 #### Production  
   
-When you call `import security` and run `security.secure()` in a production environment, this solution will 
-automatically **decrypt** and **import** your original (private) file by placing variables from that file into your
-global namespace. Unencrypted secrets never go over the wire and never touch a production hard drive. You can simply 
-reference your secrets by using regular python variable names. 
+When you call `import security` and run `security.secure()` in a production environment, the code will automatically
+**decrypt** and then **import** your original Python file (the raw version) by placing variables from that file into the
+global namespace. Unencrypted secrets never go over the wire. Unencrypted secrets are never saved to a production 
+hard-drive. And yet you can reference your secrets from within your code by simply referencing their original Python
+variables names.  
 
 Please see hello_world.py for a working example. The line `print(HELLO_WORLD)` is demonstrating that the encrypted
 variable HELLO_WORLD is now available at runtime. 
