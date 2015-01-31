@@ -8,29 +8,28 @@ should require almost no re-coding of your program. Unencrypted secrets are neve
 Implementation is as simple as:
   
     import security
-    security.secure()
+    for line in security.secure(): exec line in globals()
     
     
 ## Description
 
 #### Development
 
-When you call `import security` and run `security.secure()` in a development environment, the code will automatically 
-**encrypt** a list of python files into a secure format with a `*.rc4` extension. By default, the `security.secure()` 
-function will encrypt the file `private/passwords.py` within your project directory, and store the encrypted file
-`passwords.rc4` in the current project directory. Be sure to execute `import security` and `security.secure()` each time 
-you change your private information. When you include the two lines of code shown above in your main program, it will 
-automatically re-synchronize your files each time you run your program in your development environment.
+When you call `import security` and run `for line in security.secure(): exec line in globals()` on a development
+machine, the code will first automatically **encrypt** a list of python files into a secure `*.rc4` file. By default,
+the code encrypts the file `private/passwords.py` (from your project directory) and stores the encrypted file 
+`passwords.rc4` into the current project directory. Be sure to execute the above two lines of code each time you change 
+your private information (that should happen automatically when you run your program on your development machine).
   
 #### Production  
   
-When you call `import security` and run `security.secure()` in a production environment, the code will automatically
-**decrypt** and then **import** your original Python file (the raw version) -- placing variables from the original file
-into the global namespace. Unencrypted secrets are never stored on a production hard-driveor go over the wire. 
-And yet you can reference your secrets from within your code by simply referencing the original Python variables names.  
+When you call `import security` and run `for line in security.secure(): exec line in globals()` on a production machine, 
+the code will automatically **decrypt** and return the original Python statments from your original Python file. The 
+code above then executes each line of that code in the calling global environment, so you may then reference the 
+original Python variables names as you normally would.
 
-Please see hello_world.py for a working example. The line `print(HELLO_WORLD)` is demonstrating that the encrypted
-variable HELLO_WORLD is now available at runtime. 
+Please see hello_world.py for a working example. The line `print(HELLO_WORLD)` is demonstrating that the original Python
+variable `HELLO_WORLD` is now available as a global variable at runtime. 
   
   
 ## Installation & Programming

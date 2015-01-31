@@ -52,6 +52,7 @@ def secure(file_names=('passwords.py',), key_name='security.key', key_path='~/',
         key = open(os.path.join(os.path.dirname(__file__), key_name), 'r').read()
 
     # secure each file
+    code_lines = []
     for filename in file_names:
 
         filename_raw = os.path.join(os.path.dirname(__file__), pvt_path + filename)
@@ -76,14 +77,12 @@ def secure(file_names=('passwords.py',), key_name='security.key', key_path='~/',
             if os.path.exists(filename_rc4):
                 with open(filename_rc4, 'r') as f:
                     text = crypt(str(f.read()).strip().decode('hex'), key)
-                    for line in [str(line).strip() for line in text.splitlines()]:
-                        try:
-                            exec line in globals()
-                        except Exception as e:
-                            print(str(e))
+                    lines = [str(line).strip() for line in text.splitlines()]
+                if lines: code_lines.extend(lines)
                 if verbose:
-                    print 'Imported ' + filename_rc4
+                    print 'Encrypted ' + filename_rc4
             else:
                 print('File ' + filename_rc4 + ' not found')
         except Exception as e:
             print(str(e))
+    return code_lines

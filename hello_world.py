@@ -1,7 +1,7 @@
 """Hello World example using the security module"""
 
 import security
-security.secure()
+for line in security.secure(): exec line in globals()
 try: from _private.passwords import *            # trick PyCharm to provide code completion
 except: pass
 
