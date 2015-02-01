@@ -90,19 +90,21 @@ variable `HELLO_WORLD` is now available as a global variable at runtime.
 #### Encryption
   
 Encryption is implemented with a standard RC4 algorithm. Although RC4 is not as secure as AES, it is simple and fast.
-There are rumors that the NSA has broken RC4, but my understanding of RC4 vulnerabilities is that they derive from 
-'man-in-the-middle' attacks with large volumes of traffic, or other access to millions of encrypted files needed for
-cracking through a statistical analysis. This code presumes that your secrets will change and move over the wire 
-infrequently (i.e., a few times, not the millions of times that would be required for a hack); it also assums that you
-are encrypting only a handful of files (i.e., not the millions of files that would be required for a statistical 
-attack). The advantage of using the "alleged" RC4 algorithm (ARC4) is that you can direclty inspect the code and 
-confirm that it is the industry standard. Switching another algorithm such as AES would probably require you to
-install another module (such as pycrypto - https://pypi.python.org/pypi/pycrypto), and that involves security risks 
-of it's own and a more complicated distribution. 
+There are rumors that the NSA may be able to break RC4 under certain circumstances, but my understanding of RC4 
+vulnerabilities is that they derive from 'man-in-the-middle' attacks with large volumes of traffic, and/or access to 
+millions of encrypted files to use in a statistical analysis.  
+  
+This code presumes that your secrets will change (and thus move over the wire) only a handful of time (not the
+millions of times that would be required for a hack); it also assumes that you are encrypting only a handful of files, 
+such as one passwords file (not the millions of files that would be required for a statistical attack). The advantage 
+of using the RC4 algorithm is that you can easily inspect the code and confirm that it is the industry standard
+algorithm. Switching to another algorithm such as AES would be possible (and you can do that if you want to), but
+it may require you to install another module (such as `pycrypto` - https://pypi.python.org/pypi/pycrypto), 
+and a third-party module introduces other security risks and a more complicated distribution. RC4 works for me!
 
 
-Please note that you should NOT use the `security.rc4` file included in this repo - that is for demonstration. You 
-should generate your own, unique, long, random sequence of ASCII characters and save it into your own 
+Please note that you should NOT use the `security.rc4` file included in this repo - that is for demonstration purposes
+only. You should generate your own, unique, long, random sequence of ASCII characters and save it into your own 
 `security.rc4` file.
 
 #### Disclaimer
