@@ -68,7 +68,8 @@ def secure(file_names=('passwords.py',), key_name='security.key', key_path='~/',
                 if verbose:
                     print 'Encrypted ' + filename_raw
             else:
-                print('File (' + filename_raw + ') not found')
+                if verbose:
+                    print('File (' + filename_raw + ') not found')
         except Exception as e:
             print(str(e))
 
