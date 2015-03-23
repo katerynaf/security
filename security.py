@@ -1,12 +1,11 @@
-"""Secure python variables by encrypting, decrypting, and importing them into the global namespace."""
-__module__ = 'security.py'
-__author__ = "Kenneth A Younge"
+"""Secure python variables: encrypt, decrypt, import into global namespace."""
+__module__    = 'security.py'
+__author__    = "Kenneth A Younge"
 __copyright__ = "Copyright (c) 2014, Kenneth A. Younge"
-__license__ = "GNU General Public License"
-__email__ = "kenyounge@gmail.com"
+__license__   = "GNU General Public License"
+__email__     = "kenyounge@gmail.com"
 
 import os
-
 
 def crypt(data, key):
     x = 0
@@ -24,21 +23,24 @@ def crypt(data, key):
         out.append(chr(ord(char) ^ box[(box[x] + box[y]) % 256]))
     return ''.join(out)
 
-
-def secure(file_names=('passwords.py',), key_name='security.key', key_path='~/', pvt_path='_private/', verbose=False):
+def secure(file_names=('passwords.py',),
+           key_name='security.key',
+           key_path='~/',
+           pvt_path='_private/',
+           verbose=False):
     """Transform files (encrypt and/or decrypt _private files).
 
     Keyword arguments:
         filenames  --  sequence of file names to encrypt/decrypt
         key_name   --  file name of your personal rc4 encryption key
         key_path   --  location of encryption key on production machines
-        pvt_path   --  location of private files and encryption key during development
+        pvt_path   --  location of private files and encryption key during dev
         verbose    --   print info
 
     Defaults:
         filenames  --  passwords.py         a tuple with just one file
         key_name   --  security.key
-        key_path   --  ~/                   the user home directory; change to root '/' for tighter security
+        key_path   --  ~/                   the user home directory
         pvt_path   --  _private/
         verbose    --  False
     """
@@ -46,17 +48,23 @@ def secure(file_names=('passwords.py',), key_name='security.key', key_path='~/',
     # Load key (try production location first)
     if os.path.exists(os.path.join(key_path, key_name)):
         key = open(os.path.join(key_path, key_name), 'r').read()
-    elif os.path.exists(os.path.join(os.path.dirname(__file__), pvt_path + key_name)):
-        key = open(os.path.join(os.path.dirname(__file__), pvt_path + key_name), 'r').read()
+    elif os.path.exists(os.path.join(
+            os.path.dirname(__file__), pvt_path + key_name)):
+        key = open(os.path.join(
+            os.path.dirname(__file__), pvt_path + key_name), 'r').read()
     else:
-        key = open(os.path.join(os.path.dirname(__file__), key_name), 'r').read()
+        key = open(os.path.join(
+            os.path.dirname(__file__), key_name), 'r').read()
 
     # secure each file
     code_lines = []
     for filename in file_names:
 
-        filename_raw = os.path.join(os.path.dirname(__file__), pvt_path + filename)
-        filename_rc4 = os.path.join(os.path.dirname(__file__), os.path.basename(filename).replace('.py', '.rc4'))
+        filename_raw = os.path.join(
+            os.path.dirname(__file__), pvt_path + filename)
+        filename_rc4 = os.path.join(
+            os.path.dirname(__file__),
+            os.path.basename(filename).replace('.py', '.rc4'))
 
         # Encrypt
         try:
