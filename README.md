@@ -104,9 +104,9 @@ another module (such as `pycrypto` - https://pypi.python.org/pypi/pycrypto), and
 introduces other security risks along with a more complicated distribution. RC4 is a simple solution that works for me!
 
 
-Note that you should NOT use the `security.rc4` file included in this git repo - it is for demonstration purposes
+Note that you should NOT use the `security.key` file included in this git repo - it is for demonstration purposes
 only. You should generate your own, unique key from a long, random sequence of ASCII characters, and save that key into
-your own `security.rc4` file.
+your own `security.key` file.
 
 #### Disclaimer
 
